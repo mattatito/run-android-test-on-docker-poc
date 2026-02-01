@@ -32,11 +32,8 @@ jobs:
           java-version: '17'
       - name: Setup Android SDK and ADB
         uses: android-actions/setup-android@v3
-      - name: Install Android SDK tools
-        run: |
-          sdkmanager --update
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-34"
+      - name: Show running devices
+        run: adb devices
       - name: Wait for emulator
         run: |
           adb connect localhost:5555
