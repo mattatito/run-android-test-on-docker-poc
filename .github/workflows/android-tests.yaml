@@ -31,7 +31,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-
+      - name: Setup Android SDK and ADB
+        uses: android-actions/setup-android@v20
+      - name: Verify ADB installation
+        run: adb version
       - name: Wait for emulator
         run: |
           adb connect localhost:5555
