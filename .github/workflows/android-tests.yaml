@@ -1,0 +1,42 @@
+name: Android Instrumented Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  instrumented-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      android:
+        image: budtmo/docker-android:emulator_11.0
+        ports:
+          - 6080:6080
+          - 5554:5554
+          - 5555:5555
+        options: >-
+          --device /dev/kvm
+        env:
+          EMULATOR_DEVICE: "Samsung Galaxy S10"
+          WEB_VNC: "true"
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Wait for emulator
+        run: |
+          adb connect localhost:5555
+          adb wait-for-device
+          adb shell input keyevent 82
+
+      - name: Run instrumented tests
+        run: ./gradlew connectedAndroidTest
