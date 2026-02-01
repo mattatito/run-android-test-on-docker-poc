@@ -30,10 +30,24 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - name: Show docker images
+        run: docker ps
       - name: Setup Android SDK and ADB
         uses: android-actions/setup-android@v3
-      - name: Check docker emulator is ready
-        run: python3 infra/wait_for_android.py
+      - name: Wait for Docker emulator
+        run: |
+          echo "Waiting ADB port..."
+          timeout 180 bash -c '
+          until nc -z localhost 5555; do sleep 2; done'
+      
+          adb connect localhost:5555
+      
+          echo "Waiting Android boot..."
+          timeout 300 bash -c '
+            until adb -s localhost:5555 shell getprop sys.boot_completed | grep -m 1 "1"; do
+              sleep 3
+            done
+          '
       - name: Wait for emulator
         run: |
           adb connect localhost:5555
