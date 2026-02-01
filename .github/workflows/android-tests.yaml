@@ -45,11 +45,5 @@ jobs:
           until adb -s localhost:5555 shell getprop sys.boot_completed | grep -m 1 "1"; do
             sleep 3
           done
-
-      - name: Wait for emulator
-        run: |
-          adb wait-for-device
-          adb shell input keyevent 82
-
       - name: Run instrumented tests
         run: ./gradlew connectedAndroidTest
