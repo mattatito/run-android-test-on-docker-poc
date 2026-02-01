@@ -37,17 +37,15 @@ jobs:
       - name: Wait for Docker emulator
         run: |
           echo "Waiting ADB port..."
-          timeout 180 bash -c '
           until adb connect localhost:5555; do sleep 2; done
       
           adb connect localhost:5555
       
           echo "Waiting Android boot..."
-          timeout 300 bash -c '
-            until adb -s localhost:5555 shell getprop sys.boot_completed | grep -m 1 "1"; do
-              sleep 3
-            done
-          '
+          until adb -s localhost:5555 shell getprop sys.boot_completed | grep -m 1 "1"; do
+            sleep 3
+          done
+
       - name: Wait for emulator
         run: |
           adb wait-for-device
