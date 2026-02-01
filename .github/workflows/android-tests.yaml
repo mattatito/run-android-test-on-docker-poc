@@ -6,9 +6,13 @@ on:
   pull_request:
 
 jobs:
-  instrumented-tests:
+  unit-tests:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -19,10 +23,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Grant gradlew permission
-        run: chmod +x ./gradlew
+        run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build
-
-      - name: Run unit tests
-        run: ./gradlew test
+      - name: Run instrumented tests
+        run: ./gradlew connectedAndroidTest
