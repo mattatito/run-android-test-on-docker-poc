@@ -30,8 +30,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Show docker images
-        run: docker ps
+      - name: Setup Docker on macOS
+        uses: douglascamata/setup-docker-macos-action@v1 # Use this action to install Colima and Docker
+        with:
+          colima: latest
+          lima: latest
       - name: Setup Android SDK and ADB
         uses: android-actions/setup-android@v3
       - name: Wait for Docker emulator
