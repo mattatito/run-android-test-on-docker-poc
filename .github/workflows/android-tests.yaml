@@ -32,8 +32,8 @@ jobs:
           java-version: '17'
       - name: Setup Android SDK and ADB
         uses: android-actions/setup-android@v3
-      - name: Show running devices
-        run: adb devices
+      - name: Check docker emulator is ready
+        run: python3 wait_for_android.py
       - name: Wait for emulator
         run: |
           adb connect localhost:5555
