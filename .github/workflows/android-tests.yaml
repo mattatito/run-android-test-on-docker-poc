@@ -7,7 +7,7 @@ on:
 
 jobs:
   instrumented-tests:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     services:
       android:
@@ -22,6 +22,11 @@ jobs:
           WEB_VNC: "false"
 
     steps:
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: Checkout project
         uses: actions/checkout@v4
 
@@ -30,11 +35,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Setup Docker on macOS
-        uses: douglascamata/setup-docker-macos-action@v1 # Use this action to install Colima and Docker
-        with:
-          colima: latest
-          lima: latest
       - name: Setup Android SDK and ADB
         uses: android-actions/setup-android@v3
       - name: Wait for Docker emulator
