@@ -48,4 +48,5 @@ jobs:
       - name: Grant gradlew permission
         run: chmod +x gradlew
       - name: Run instrumented tests
-        run: ./gradlew connectedAndroidTest
+        run: |
+          ./gradlew connectedAndroidTest \-Pandroid.testInstrumentationRunnerArguments.serial=localhost:5555
