@@ -18,8 +18,8 @@ jobs:
       - name: Setup Android SDK and ADB
         uses: android-actions/setup-android@v3
 
-      - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
+      - name: Grant gradlew permission
+        run: chmod +x ./gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
